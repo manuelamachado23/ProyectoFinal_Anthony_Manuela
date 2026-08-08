@@ -52,3 +52,52 @@ class Municipio:
             return 0.0
         con_coords = len(self.obtener_localidades_con_coordenadas())
         return (con_coords / total) * 100.0
+
+class RegistroClima:
+    # Clase para modelar los datos recibidos de la API en tiempo real.
+   
+    # Atributos de la Clase RegistroClima.
+    def __init__(
+        self,
+        municipio: str,
+        localidad: str,
+        latitud: float,
+        longitud: float,
+        temperatura: float,
+        humedad: int,
+        viento: float,
+        estado_tiempo: str
+    ):
+        # Datos geográficos.
+        self.municipio: str = municipio
+        self.localidad: str = localidad
+        self.latitud: float = latitud
+        self.longitud: float = longitud
+
+        # Variables meteorológicas traídas de Open-Meteo.
+        self.temperatura: float = temperatura
+        self.humedad: int = humedad
+        self.viento: float = viento
+        self.estado_tiempo: str = estado_tiempo
+
+    def mostrar_detalle(self) -> None:
+        # Despliega en pantalla la información detallada del clima consultado.
+        print("\nDETALLES METEOROLÓGICOS")
+        print()
+        print(f"1. Municipio / Localidad: {self.municipio} - {self.localidad}")
+        print(f"2. Coordenadas: Latitud {self.latitud}, Longitud {self.longitud}")
+        print(f"3. Temperatura actual: {self.temperatura} °C")
+        print(f"4. Humedad relativa: {self.humedad} %")
+        print(f"5. Velocidad del viento: {self.viento} km/h")
+        print(f"6. Estado del tiempo: {self.estado_tiempo}\n")
+
+class ConsultaSesion:
+    # Clase para registrar cada consulta realizada mientras la app está abierta.
+    
+    # Atributos de la Clase ConsultaSesion.
+    def __init__(self, municipio: str, localidad: str, temperatura: float):
+        # Guardamos el municipio, la localidad y la temperatura registrada.
+        self.municipio: str = municipio
+        self.localidad: str = localidad
+        self.temperatura: float = temperatura
+        
