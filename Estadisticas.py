@@ -78,3 +78,63 @@ class GestorHistorico:
            ],
            "timezone": "auto"
        }
+
+        try: 
+           resp = requests.get(url, params=params, timeout=15)
+           resp.raise_for_status()
+           data = resp.json()
+           daily_data = data.get("daily", {})
+
+           if not daily_data or "time" not in daily_data:
+               print("No se obtuvieron registros para el rango especificado.")
+               return
+
+           df = pd.DataFrame({
+               "Fecha": pd.to_datetime(daily_data["time"]),
+               "Temperatura": daily_data["temperature_2m_mean"],
+               "Humedad": daily_data["relative_humidity_2m_mean"],
+               "Precipitacion": daily_data["precipitation_sum"],
+               "Viento": daily_data["wind_speed_10m_max"]
+           })
+
+           df["Año"] = df["Fecha"].dt.year
+
+           print(f"\nPROMEDIOS HISTÓRICOS ({nombre_localidad})")
+           print(f"• Temperatura Promedio: {df['Temperatura'].mean():.2f} °C")
+           print(f"• Humedad Promedio:     {df['Humedad'].mean():.2f} %")
+           print(f"• Precipitación Total:  {df['Precipitacion'].sum():.2f} mm")
+           print(f"• Viento Máx Promedio:  {df['Viento'].mean():.2f} km/h")
+
+           agrupado_año = df.groupby("Año").agg({
+               "Temperatura": "mean",
+               "Humedad": "mean",
+               "Precipitacion": "sum"
+           })
+
+           if not agrupado_año.empty:
+               año_caluroso = agrupado_año["Temperatura"].idxmax()
+               año_fresco = agrupado_año["Temperatura"].idxmin()
+               año_lluvioso = agrupado_año["Precipitacion"].idxmax()
+               año_humedo = agrupado_año["Humedad"].idxmax()
+               print(f"\nANÁLISIS COMPARATIVO POR AÑO")
+               print(f"  Año más caluroso:      {año_caluroso}")
+               print(f"  Año más fresco:        {año_fresco}")
+               print(f"  Año más lluvioso:      {año_lluvioso}")
+               print(f"  Año con mayor humedad: {año_humedo}")
+
+           plt.figure(figsize=(10, 6))
+           plt.plot(df["Fecha"], df["Temperatura"], label="Temperatura (°C)", color="tab:red")
+           plt.plot(df["Fecha"], df["Humedad"], label="Humedad (%)", color="tab:blue")
+           plt.plot(df["Fecha"], df["Viento"], label="Viento (km/h)", color="tab:green")
+           plt.title(f"Evolución Meteorológica - {nombre_localidad} ({fecha_inicio} a {fecha_fin})")
+           plt.xlabel("Fecha")
+           plt.ylabel("Magnitudes")
+           plt.legend()
+           plt.grid(True)
+           plt.tight_layout()
+           plt.show()
+
+       except requests.exceptions.RequestException as e:
+           print(f"Ocurrió un error al consultar el histórico: {e}")
+       except Exception as e:
+           print(f"ERROR {e}")
