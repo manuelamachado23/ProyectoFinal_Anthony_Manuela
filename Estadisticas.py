@@ -47,7 +47,7 @@ class GestorEstadisticas:
                    print(f"  - {loc.nombre}")
 
    def promedio_general_temperatura(self) -> None:
-       # Calcula e informa el promedio general de temperaturas consultadas en la sesión."""
+       # Calcula e informa el promedio general de temperaturas consultadas en la sesión.
        if not self.consultas_sesion:
            print("\nNo hay datos suficientes para calcular el promedio de la sesión.")
            return
