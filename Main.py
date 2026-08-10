@@ -36,7 +36,7 @@ def ejecutar_menu_principal() -> None:
     gestor_historico = GestorHistorico()
 
     while True:
-        print("MENÚ PRINCIPAL METEOCARACAS")
+        print("\nMENÚ PRINCIPAL METEOCARACAS")
         print("1. Consulta del clima en tiempo real (Por Municipio y Localidad)")
         print("2. Consulta del clima en tiempo real (Búsqueda directa por nombre)")
         print("3. Módulo de Reportes y Estadísticas de Sesión")
@@ -46,7 +46,7 @@ def ejecutar_menu_principal() -> None:
         opcion = input("\nSeleccione una opción (1-5): ").strip()
 
         if opcion == "1":
-            print("\n--- SELECCIÓN DE MUNICIPIO ---")
+            print("\nSELECCIÓN DE MUNICIPIO ")
             for i, mun in enumerate(municipios, 1):
                 print(f"{i}. {mun.nombre}")
 
