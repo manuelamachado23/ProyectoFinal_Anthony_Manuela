@@ -50,7 +50,7 @@ def ejecutar_menu_principal() -> None:
             for i, mun in enumerate(municipios, 1):
                 print(f"{i}. {mun.nombre}")
 
-             try:
+            try:
                 idx_m = int(input("\nElija el número del municipio: ")) - 1
                 if 0 <= idx_m < len(municipios):
                     mun_sel = municipios[idx_m]
