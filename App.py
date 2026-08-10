@@ -18,7 +18,7 @@ class GestorDatos:
            with open(ruta_archivo, "r", encoding="utf-8") as archivo:
                datos_raw = json.load(archivo)
 
-            for nombre_municipio, lista_locs in datos_raw.items():
+           for nombre_municipio, lista_locs in datos_raw.items():
                municipio_obj = Municipio(nombre=nombre_municipio)
                for loc in lista_locs:
                    nombre_zona = loc.get("localidad") or loc.get("nombre") or "Desconocida"
