@@ -75,3 +75,73 @@ def ejecutar_menu_principal() -> None:
                             gestor_stats.registrar_consulta(reg)
                     else:
                         print("\nSelección de localidad fuera de rango.")
+                else:
+                    print("\nSelección de municipio fuera de rango.")
+            except ValueError:
+                print("\nIngrese un número entero válido.")
+
+        elif opcion == "2":
+            query = input("\nIngrese el nombre (o parte) de la localidad a buscar: ")
+            resultados = buscar_localidades_por_nombre(municipios, query)
+
+            if not resultados:
+                print("\nNo se encontraron localidades con coordenadas válidas que coincidan con la búsqueda.")
+            else:
+                print(f"\nCoincidencias encontradas ({len(resultados)}):")
+                for k, (m, l) in enumerate(resultados, 1):
+                    print(f"{k}. {l.nombre} (Municipio: {m.nombre})")
+
+                try:
+                    idx_sel = int(input("\nSeleccione el número de la localidad deseada: ")) - 1
+                    if 0 <= idx_sel < len(resultados):
+                        mun_o, loc_o = resultados[idx_sel]
+                        reg = ServicioApiClima.consultar_clima_actual(
+                            mun_o.nombre, loc_o.nombre, loc_o.latitud, loc_o.longitud
+                        )
+                        if reg:
+                            reg.mostrar_detalle()
+                            gestor_stats.registrar_consulta(reg)
+                    else:
+                        print("\nOpción fuera de rango.")
+                except ValueError:
+                    print("\nIngrese un valor numérico.")
+
+        elif opcion == "3":
+            print("\nMÓDULO DE REPORTES Y ESTADÍSTICAS")
+            gestor_stats.ranking_temperatura()
+            gestor_stats.promedio_general_temperatura()
+            gestor_stats.reporte_cobertura_geografica(municipios)
+
+        elif opcion == "4":
+            print("\nCONSULTA HISTÓRICA Y GRÁFICOS")
+            query = input("Ingrese la localidad a analizar: ")
+            resultados = buscar_localidades_por_nombre(municipios, query)
+
+            if not resultados:
+                print("\nNo se encontró la localidad especificada.")
+            else:
+                for k, (m, l) in enumerate(resultados, 1):
+                    print(f"{k}. {l.nombre} ({m.nombre})")
+                try:
+                    sel = int(input("\nSeleccione el número: ")) - 1
+                    if 0 <= sel < len(resultados):
+                        _, loc_h = resultados[sel]
+                        f_inicio = input("Fecha inicio (AAAA-MM-DD): ").strip()
+                        f_fin = input("Fecha fin (AAAA-MM-DD): ").strip()
+
+                        gestor_historico.consultar_y_graficar_historico(
+                            loc_h.latitud, loc_h.longitud, loc_h.nombre, f_inicio, f_fin
+                        )
+                    else:
+                        print("\nOpción no válida.")
+                except ValueError:
+                    print("\nEntrada no válida.")
+
+        elif opcion == "5":
+            print("\n¡Gracias por utilizar MeteoCaracas! Hasta luego.")
+            break
+        else:
+            print("\nOpción no válida. Intente con un número entre 1 y 5.")
+
+if __name__ == "__main__":
+    ejecutar_menu_principal()
