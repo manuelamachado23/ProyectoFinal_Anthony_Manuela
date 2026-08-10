@@ -134,6 +134,9 @@ class GestorHistorico:
            plt.tight_layout()
            # Guarda la gráfica como imagen, para que el usuario pueda obtenerla desde GitHub
            plt.savefig("grafico_historico.png", bbox_inches='tight')
+           plt.close()
+           print("\n Gráfico guardado como 'grafico_historico.png'.")
+           
 
        except requests.exceptions.RequestException as e:
            print(f"Ocurrió un error al consultar el histórico: {e}")
