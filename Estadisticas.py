@@ -132,7 +132,8 @@ class GestorHistorico:
            plt.legend()
            plt.grid(True)
            plt.tight_layout()
-           plt.show()
+           # Guarda la gráfica como imagen, para que el usuario pueda obtenerla desde GitHub
+           plt.savefig("grafico_historico.png", bbox_inches='tight')
 
        except requests.exceptions.RequestException as e:
            print(f"Ocurrió un error al consultar el histórico: {e}")
