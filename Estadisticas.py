@@ -79,7 +79,7 @@ class GestorHistorico:
            "timezone": "auto"
        }
 
-        try: 
+       try: 
            resp = requests.get(url, params=params, timeout=15)
            resp.raise_for_status()
            data = resp.json()
